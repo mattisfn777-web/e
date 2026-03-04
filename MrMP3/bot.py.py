@@ -10,7 +10,7 @@ from datetime import datetime
 # -----------------------------
 # 🔑 BOT TOKEN
 # -----------------------------
-TOKEN = "MTQ3ODA3NjIyNTQ4MTA4NDk2OA.GlYz6u.IrOTbMphtSA8RSfrs15e-jvTioMjh52_dR-Evg"
+TOKEN = os.getenv("MTQ3ODA3NjIyNTQ4MTA4NDk2OA.GlYz6u.IrOTbMphtSA8RSfrs15e-jvTioMjh52_dR-Evg")
 # -----------------------------
 # 📌 CHANNEL ID
 # -----------------------------
@@ -156,4 +156,5 @@ async def mp3(interaction: discord.Interaction, url: str):
 # -----------------------------
 # Run the bot
 # -----------------------------
+
 bot.run(TOKEN)
