@@ -79,7 +79,7 @@ async def mp3(interaction: discord.Interaction, url: str):
     )
 
     ydl_opts = {
-        'ffmpeg_location': 'ffmpeg',
+        'ffmpeg_location': '/usr/bin/ffmpeg',
         'format': 'bestaudio/best',
         'outtmpl': 'song.%(ext)s',
         'postprocessors': [{
