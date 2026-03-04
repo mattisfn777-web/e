@@ -126,7 +126,7 @@ async def mp3(interaction: discord.Interaction, url: str):
         }],
         'quiet': True,
         'noplaylist': True,
-        'extractor_args': {'youtube': {'player_client': ['web']}},
+        'extractor_args': {'youtube': {'player_client': ['ios']}},
         'http_headers': {
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
         },
@@ -164,12 +164,10 @@ async def downloadstatus(interaction: discord.Interaction):
 
     test_url = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
     ydl_opts = {
-        'ffmpeg_location': 'ffmpeg',
-        'format': 'bestaudio',
-        'outtmpl': 'test.%(ext)s',
         'quiet': True,
         'noplaylist': True,
-        'extractor_args': {'youtube': {'player_client': ['web']}},
+        'skip_download': True,
+        'extractor_args': {'youtube': {'player_client': ['ios']}},
         'http_headers': {
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
         },
@@ -177,8 +175,8 @@ async def downloadstatus(interaction: discord.Interaction):
 
     try:
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-            ydl.extract_info(test_url, download=False)
-        await interaction.followup.send("🟢 Download service is **ONLINE**! YouTube is reachable.", ephemeral=True)
+            info = ydl.extract_info(test_url, download=False)
+        await interaction.followup.send(f"🟢 Download service is **ONLINE**! Test video: `{info.get('title', 'Unknown')}`", ephemeral=True)
     except Exception as e:
         await interaction.followup.send(f"🔴 Download service is **OFFLINE**!\nError: {e}", ephemeral=True)
 
