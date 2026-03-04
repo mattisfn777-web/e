@@ -117,7 +117,7 @@ async def mp3(interaction: discord.Interaction, url: str):
 
     ydl_opts = {
         'ffmpeg_location': 'ffmpeg',
-        'format': 'bestaudio/best',
+        'format': 'bestaudio',
         'outtmpl': 'song.%(ext)s',
         'postprocessors': [{
             'key': 'FFmpegExtractAudio',
@@ -165,7 +165,7 @@ async def downloadstatus(interaction: discord.Interaction):
     test_url = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
     ydl_opts = {
         'ffmpeg_location': 'ffmpeg',
-        'format': 'bestaudio/best',
+        'format': 'bestaudio',
         'outtmpl': 'test.%(ext)s',
         'quiet': True,
         'noplaylist': True,
