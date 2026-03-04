@@ -19,7 +19,7 @@ CHANNEL_ID = 1478397944074862824
 # -----------------------------
 # 👑 OWNER ID (YOUR USER ID)
 # -----------------------------
-OWNER_ID = 1347586706425122857  # Example: 123456789012345678
+OWNER_ID = 1347586706425122857
 
 # -----------------------------
 # Intents
@@ -59,7 +59,6 @@ async def on_ready():
 # -----------------------------
 @bot.tree.command(name="status", description="Check if the bot is online")
 async def status(interaction: discord.Interaction):
-
     if bot.is_ready():
         await interaction.response.send_message(
             "🟢 The bot is currently **ONLINE**!",
@@ -110,7 +109,6 @@ async def mp3(interaction: discord.Interaction, url: str):
         ephemeral=True
     )
 
-    # Notify you instantly when command is used
     await notify_owner(
         interaction.user,
         url,
@@ -118,17 +116,21 @@ async def mp3(interaction: discord.Interaction, url: str):
     )
 
     ydl_opts = {
-    'ffmpeg_location': 'ffmpeg',  # ✅ correct
-    'format': 'bestaudio/best',
-    'outtmpl': 'song.%(ext)s',
-    'postprocessors': [{
-        'key': 'FFmpegExtractAudio',
-        'preferredcodec': 'mp3',
-        'preferredquality': '192',
-    }],
-    'quiet': True,
-    'noplaylist': True,
-}
+        'ffmpeg_location': 'ffmpeg',
+        'format': 'bestaudio/best',
+        'outtmpl': 'song.%(ext)s',
+        'postprocessors': [{
+            'key': 'FFmpegExtractAudio',
+            'preferredcodec': 'mp3',
+            'preferredquality': '192',
+        }],
+        'quiet': True,
+        'noplaylist': True,
+        'extractor_args': {'youtube': {'player_client': ['web']}},
+        'http_headers': {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        },
+    }
 
     try:
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
@@ -154,9 +156,33 @@ async def mp3(interaction: discord.Interaction, url: str):
         )
 
 # -----------------------------
+# 📥 Download Status Command
+# -----------------------------
+@bot.tree.command(name="downloadstatus", description="Check if YouTube downloading is working")
+async def downloadstatus(interaction: discord.Interaction):
+    await interaction.response.send_message("🔍 Checking download status...", ephemeral=True)
+
+    test_url = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+    ydl_opts = {
+        'ffmpeg_location': 'ffmpeg',
+        'format': 'bestaudio/best',
+        'outtmpl': 'test.%(ext)s',
+        'quiet': True,
+        'noplaylist': True,
+        'extractor_args': {'youtube': {'player_client': ['web']}},
+        'http_headers': {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        },
+    }
+
+    try:
+        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+            ydl.extract_info(test_url, download=False)
+        await interaction.followup.send("🟢 Download service is **ONLINE**! YouTube is reachable.", ephemeral=True)
+    except Exception as e:
+        await interaction.followup.send(f"🔴 Download service is **OFFLINE**!\nError: {e}", ephemeral=True)
+
+# -----------------------------
 # Run the bot
 # -----------------------------
-
 bot.run(TOKEN)
-
-
